@@ -19,13 +19,16 @@ router.get("/", async (req, res) => {
 });
 //get user by id
 router.get("/:id", async (req, res) => {
-	try {
-		const user = await User.findById(req.params.id);
-		const { password, ...others } = user._doc;
-		res.status(200).json(others);
-	} catch (err) {
-		res.status(500).json(err);
-	}
+	await User.findById(req.params.id)
+		.populate("following")
+		.populate("followers")
+		.exec((err, user) => {
+			if (err) {
+				return res.status(500).json(err);
+			}
+			const { password, ...others } = user._doc;
+			res.status(200).json(others);
+		});
 });
 //update
 router.put("/:id", async (req, res) => {
@@ -81,7 +84,7 @@ router.post("/:id/follow", (req, res) => {
 		user.followers.push(req.body.userId);
 		const followedUser = user._id;
 		user.save();
-		res.status(200).json(user);
+		// res.status(200).json(user);
 
 		// find current user
 		User.findById(req.body.userId)
@@ -89,6 +92,7 @@ router.post("/:id/follow", (req, res) => {
 				//push followed user
 				user.following.push(followedUser);
 				user.save();
+				res.status(200).json(user);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -103,7 +107,6 @@ router.post("/:id/unfollow", (req, res) => {
 		user.followers.pull(req.body.userId);
 		const unfollowedUser = user._id;
 		user.save();
-		res.status(200).json(user);
 
 		// find current user
 		User.findById(req.body.userId)
@@ -111,6 +114,7 @@ router.post("/:id/unfollow", (req, res) => {
 				//push followed user
 				user.following.pull(unfollowedUser);
 				user.save();
+				res.status(200).json(user);
 			})
 			.catch((err) => {
 				console.log(err);

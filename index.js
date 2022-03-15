@@ -105,7 +105,6 @@ app.delete("/api/image/:filename", async (req, res) => {
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
-
 app.use("/api/items", itemRoute);
 app.use("/api/categories", categoryRoute);
 app.use("/api/subcategories", subcategoryRoute);

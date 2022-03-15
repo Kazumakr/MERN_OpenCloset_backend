@@ -4,36 +4,63 @@ const mongoose = require("mongoose");
 
 //get items by category or user or SearchTerm, or all items
 router.get("/filteritem/:id", async (req, res) => {
-	const username = req.query.user;
 	const categoryName = req.query.category;
 	const subcategoryName = req.query.subcategory;
 	const color = req.query.color;
 	const searchTerm = req.query.search;
+	const sort = req.query.sort;
 	try {
 		let items;
-		if (username) {
-			items = await Item.find({ username });
-		} else if (categoryName) {
+		if (categoryName) {
 			items = await Item.find({
-				category: {
-					$in: [categoryName],
-				},
+				$and: [
+					{ userId: req.params.id },
+					{
+						category: {
+							$in: [categoryName],
+						},
+					},
+				],
 			});
 		} else if (subcategoryName) {
 			items = await Item.find({
-				subcategory: {
-					$in: [subcategoryName],
-				},
-			});
-		} else if (color) {
-			items = await Item.find({ color });
-		} else if (searchTerm) {
-			items = await Item.find({
-				$or: [
-					{ name: { $regex: searchTerm, $options: "$i" } },
-					{ brand: { $regex: searchTerm, $options: "$i" } },
+				$and: [
+					{ userId: req.params.id },
+					{
+						subcategory: {
+							$in: [subcategoryName],
+						},
+					},
 				],
 			});
+		} else if (color) {
+			items = await Item.find({ $and: [{ userId: req.params.id }, { color }] });
+		} else if (searchTerm) {
+			items = await Item.find({
+				$and: [
+					{ userId: req.params.id },
+					{
+						$or: [
+							{ name: { $regex: searchTerm, $options: "$i" } },
+							{ brand: { $regex: searchTerm, $options: "$i" } },
+						],
+					},
+				],
+			});
+		} else if (sort) {
+			if (sort === "newest") {
+				items = await Item.find({ userId: req.params.id }).sort({
+					createdAt: -1,
+				});
+			} else if (sort === "lowest") {
+				items = await Item.find({ userId: req.params.id }).sort({
+					price: 1,
+				});
+			} else if (sort === "highest") {
+				items = await Item.find({ userId: req.params.id }).sort({
+					price: -1,
+				});
+			}
 		} else {
 			items = await Item.find({ userId: req.params.id });
 		}
@@ -50,6 +77,16 @@ router.get("/:id", async (req, res) => {
 	} catch (err) {
 		res.status(500).json(err);
 	}
+});
+
+// get following user's items
+router.get("/followingitems/:id", async (req, res) => {
+	const items = await Item.find({ userId: req.params.id })
+		.populate("userId")
+		.sort({
+			createdAt: -1,
+		});
+	res.status(200).json(items);
 });
 
 //add new item

@@ -30,18 +30,14 @@ const UserSchema = new mongoose.Schema(
 		},
 		following: [
 			{
-				user: {
-					type: mongoose.Schema.Types.ObjectId,
-					ref: "User",
-				},
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "User",
 			},
 		],
 		followers: [
 			{
-				user: {
-					type: mongoose.Schema.Types.ObjectId,
-					ref: "User",
-				},
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "User",
 			},
 		],
 	},
