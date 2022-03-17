@@ -5,7 +5,6 @@ const ItemSchema = new mongoose.Schema(
 		name: {
 			type: String,
 			required: true,
-			unique: true,
 		},
 		price: {
 			type: Number,
@@ -38,7 +37,7 @@ const ItemSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		userId: {
+		user: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
 		},

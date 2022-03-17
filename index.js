@@ -9,8 +9,6 @@ const mongoose = require("mongoose");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/users");
 const itemRoute = require("./routes/items");
-const categoryRoute = require("./routes/categories");
-const subcategoryRoute = require("./routes/subcategories");
 
 //file upload
 const multer = require("multer");
@@ -75,6 +73,7 @@ app.post(
 );
 app.get("/api/image/:filename", (req, res) => {
 	gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+		console.log(file);
 		if (!file || file.length === 0) {
 			return res.status(404).json({
 				err: "No file exist",
@@ -106,8 +105,6 @@ app.delete("/api/image/:filename", async (req, res) => {
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/items", itemRoute);
-app.use("/api/categories", categoryRoute);
-app.use("/api/subcategories", subcategoryRoute);
 
 app.listen(process.env.PORT || 5000, () => {
 	console.log("Server is running");

@@ -14,7 +14,7 @@ router.get("/filteritem/:id", async (req, res) => {
 		if (categoryName) {
 			items = await Item.find({
 				$and: [
-					{ userId: req.params.id },
+					{ user: req.params.id },
 					{
 						category: {
 							$in: [categoryName],
@@ -25,7 +25,7 @@ router.get("/filteritem/:id", async (req, res) => {
 		} else if (subcategoryName) {
 			items = await Item.find({
 				$and: [
-					{ userId: req.params.id },
+					{ user: req.params.id },
 					{
 						subcategory: {
 							$in: [subcategoryName],
@@ -34,11 +34,11 @@ router.get("/filteritem/:id", async (req, res) => {
 				],
 			});
 		} else if (color) {
-			items = await Item.find({ $and: [{ userId: req.params.id }, { color }] });
+			items = await Item.find({ $and: [{ user: req.params.id }, { color }] });
 		} else if (searchTerm) {
 			items = await Item.find({
 				$and: [
-					{ userId: req.params.id },
+					{ user: req.params.id },
 					{
 						$or: [
 							{ name: { $regex: searchTerm, $options: "$i" } },
@@ -49,20 +49,20 @@ router.get("/filteritem/:id", async (req, res) => {
 			});
 		} else if (sort) {
 			if (sort === "newest") {
-				items = await Item.find({ userId: req.params.id }).sort({
+				items = await Item.find({ user: req.params.id }).sort({
 					createdAt: -1,
 				});
 			} else if (sort === "lowest") {
-				items = await Item.find({ userId: req.params.id }).sort({
+				items = await Item.find({ user: req.params.id }).sort({
 					price: 1,
 				});
 			} else if (sort === "highest") {
-				items = await Item.find({ userId: req.params.id }).sort({
+				items = await Item.find({ user: req.params.id }).sort({
 					price: -1,
 				});
 			}
 		} else {
-			items = await Item.find({ userId: req.params.id });
+			items = await Item.find({ user: req.params.id });
 		}
 		res.status(200).json(items);
 	} catch (err) {
@@ -81,11 +81,9 @@ router.get("/:id", async (req, res) => {
 
 // get following user's items
 router.get("/followingitems/:id", async (req, res) => {
-	const items = await Item.find({ userId: req.params.id })
-		.populate("userId")
-		.sort({
-			createdAt: -1,
-		});
+	const items = await Item.find({ user: req.params.id }).populate("user").sort({
+		createdAt: -1,
+	});
 	res.status(200).json(items);
 });
 
@@ -196,4 +194,108 @@ router.put("/:id/unlikes", (req, res) => {
 	});
 });
 
+//get liked items
+router.get("/likeditems/:id", async (req, res) => {
+	const categoryName = req.query.category;
+	const subcategoryName = req.query.subcategory;
+	const color = req.query.color;
+	const searchTerm = req.query.search;
+	const sort = req.query.sort;
+	try {
+		let items;
+		if (categoryName) {
+			items = await Item.find({
+				$and: [
+					{
+						likes: {
+							$in: [req.params.id],
+						},
+					},
+					{
+						category: {
+							$in: [categoryName],
+						},
+					},
+				],
+			});
+		} else if (subcategoryName) {
+			items = await Item.find({
+				$and: [
+					{
+						likes: {
+							$in: [req.params.id],
+						},
+					},
+					{
+						subcategory: {
+							$in: [subcategoryName],
+						},
+					},
+				],
+			});
+		} else if (color) {
+			items = await Item.find({
+				$and: [
+					{
+						likes: {
+							$in: [req.params.id],
+						},
+					},
+					{ color },
+				],
+			});
+		} else if (searchTerm) {
+			items = await Item.find({
+				$and: [
+					{
+						likes: {
+							$in: [req.params.id],
+						},
+					},
+					{
+						$or: [
+							{ name: { $regex: searchTerm, $options: "$i" } },
+							{ brand: { $regex: searchTerm, $options: "$i" } },
+						],
+					},
+				],
+			});
+		} else if (sort) {
+			if (sort === "newest") {
+				items = await Item.find({
+					likes: {
+						$in: [req.params.id],
+					},
+				}).sort({
+					createdAt: -1,
+				});
+			} else if (sort === "lowest") {
+				items = await Item.find({
+					likes: {
+						$in: [req.params.id],
+					},
+				}).sort({
+					price: 1,
+				});
+			} else if (sort === "highest") {
+				items = await Item.find({
+					likes: {
+						$in: [req.params.id],
+					},
+				}).sort({
+					price: -1,
+				});
+			}
+		} else {
+			items = await Item.find({
+				likes: {
+					$in: [req.params.id],
+				},
+			});
+		}
+		res.status(200).json(items);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
 module.exports = router;
