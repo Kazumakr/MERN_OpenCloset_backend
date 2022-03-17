@@ -6,9 +6,9 @@ This project is an application that manages items such as clothes and accessorie
 
 Project Link: [https://quizzical-panini-3b7a85.netlify.app/]
 
-Test Account
-Email: test@test.com
-Password: TestPassword
+Test Account  
+Email: test@test.com  
+Password: TestPassword  
 
 Frontend : [https://github.com/Kazumakr/MERN_OpenCloset_frontend]
 
@@ -23,9 +23,9 @@ Frontend : [https://github.com/Kazumakr/MERN_OpenCloset_frontend]
 
 ## Description
 
-I built this project for three reasons:
-1: I want to see what clothes I have in my closet while shopping.
-2: I want to see what kind of clothes other people have.
+I built this project for three reasons:  
+1: I want to see what clothes I have in my closet while shopping.  
+2: I want to see what kind of clothes other people have.  
 3: I want to see my friends' sizes and what kind of clothes they like (e.g. colors, brands, etc.) when choosing gifts for them.
 
 It would also be useful for community creation and marketing purposes because of its social media features such as follow, comment, and like.
@@ -96,8 +96,8 @@ Since this is the second project in the MERN stack, I learned how to handle an i
 
 ### Search users(e.g. Username: Tom, minHeight: 170cm, maxHeight: 176cm, Gender: Male)
 
-`GET /api/users/?search=Tom`
-`GET /api/users/?minheight=170&maxheight=176`
+`GET /api/users/?search=Tom`  
+`GET /api/users/?minheight=170&maxheight=176`  
 `GET /api/users/?gender=Male`
 
 ### Get single user
@@ -148,11 +148,11 @@ You need a request body {userId:current user's ID}
 
 ### Search items(e.g. Category: clothing, Subcategory: tops, Color: white, Itemname: Jacket, Sort: newest)
 
-`GET /api/items/filteritem/:id/?category=clothing`
-`GET /api/items/filteritem/:id/?subcategory=tops`
-`GET /api/items/filteritem/:id/?color=white`
-`GET /api/items/filteritem/:id/?search=Jacket`
-`GET /api/items/filteritem/:id/?sort=newest`
+`GET /api/items/filteritem/:id/?category=clothing`  
+`GET /api/items/filteritem/:id/?subcategory=tops`  
+`GET /api/items/filteritem/:id/?color=white`  
+`GET /api/items/filteritem/:id/?search=Jacket`  
+`GET /api/items/filteritem/:id/?sort=newest`  
 
 ### Add a comment to an item
 
