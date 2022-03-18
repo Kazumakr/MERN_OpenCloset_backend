@@ -8,7 +8,7 @@ Project Link: [https://quizzical-panini-3b7a85.netlify.app/]
 
 Test Account  
 Email: test@test.com  
-Password: TestPassword  
+Password: Test  
 
 Frontend : [https://github.com/Kazumakr/MERN_OpenCloset_frontend]
 
