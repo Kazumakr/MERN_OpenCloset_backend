@@ -1,6 +1,6 @@
 # Open Closet-Backend
 
-This project is an application that manages items such as clothes and accessories that you have with data, and shares them with other users.
+This project is for managing items in your closet and sharing them with others.
 
 ![OpenClosetScreenshot](https://user-images.githubusercontent.com/67501734/158911606-16f954a2-cffa-4e6a-96be-d9cc9b0b7b2a.png)
 
