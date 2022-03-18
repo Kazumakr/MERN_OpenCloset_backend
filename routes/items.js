@@ -217,7 +217,7 @@ router.get("/likeditems/:id", async (req, res) => {
 						},
 					},
 				],
-			});
+			}).populate("user");
 		} else if (subcategoryName) {
 			items = await Item.find({
 				$and: [
@@ -232,7 +232,7 @@ router.get("/likeditems/:id", async (req, res) => {
 						},
 					},
 				],
-			});
+			}).populate("user");
 		} else if (color) {
 			items = await Item.find({
 				$and: [
@@ -243,7 +243,7 @@ router.get("/likeditems/:id", async (req, res) => {
 					},
 					{ color },
 				],
-			});
+			}).populate("user");
 		} else if (searchTerm) {
 			items = await Item.find({
 				$and: [
@@ -259,39 +259,45 @@ router.get("/likeditems/:id", async (req, res) => {
 						],
 					},
 				],
-			});
+			}).populate("user");
 		} else if (sort) {
 			if (sort === "newest") {
 				items = await Item.find({
 					likes: {
 						$in: [req.params.id],
 					},
-				}).sort({
-					createdAt: -1,
-				});
+				})
+					.populate("user")
+					.sort({
+						createdAt: -1,
+					});
 			} else if (sort === "lowest") {
 				items = await Item.find({
 					likes: {
 						$in: [req.params.id],
 					},
-				}).sort({
-					price: 1,
-				});
+				})
+					.populate("user")
+					.sort({
+						price: 1,
+					});
 			} else if (sort === "highest") {
 				items = await Item.find({
 					likes: {
 						$in: [req.params.id],
 					},
-				}).sort({
-					price: -1,
-				});
+				})
+					.populate("user")
+					.sort({
+						price: -1,
+					});
 			}
 		} else {
 			items = await Item.find({
 				likes: {
 					$in: [req.params.id],
 				},
-			});
+			}).populate("user");
 		}
 		res.status(200).json(items);
 	} catch (err) {
